@@ -1,38 +1,134 @@
 .App {
-  text-align: center;
+	min-height: 800px;
+	display: grid;
+	grid-template-columns: 200px 4fr 2fr;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#navigation {
+	border: thin solid;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#todo-list {
+	border: thin solid;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#edit-form {
+	border: thin solid;
 }
 
-.App-link {
-  color: #61dafb;
+.todoItem {
+	/*
+	display: flex;
+	flex-flow: row nowrap;
+	flex-direction: column;
+	*/
+	border: solid gray thin;
+	margin-top: 6px;
+	/* max-height: 30px;*/
+	padding: 6px;
+	font-size: 12pt;
+	cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+label {
+	display: block;
+
 }
+label.css-label {
+	/*display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: center*/;
+	display: inline;
+	width: 20px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: pointer;
+}
+
+div.task-meta {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+}
+
+.task-meta .project {
+	margin-left: 6px;
+}
+
+.task-meta .context {
+	margin-left: 6px;
+}
+
+.task-meta .custom-tags {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+}
+
+.custom-tags .custom-tag {
+	flex: 1;
+}
+
+.custom-tags .custom-tag .custom-tag-key {
+	margin-left: 2px;
+	padding: 1px 1px 1px;
+	background-color: #AACAFF;
+	border: 2px solid #AACAFF;
+	border-top-left-radius: 10%;
+	border-bottom-left-radius: 10%;
+	white-space: nowrap;
+}
+
+.custom-tags .custom-tag .custom-tag-value {
+	margin-right: 2px;
+	padding: 1px 2px 1px;
+	background-color: #FFF;
+	border: 2px solid #AACAFF;
+	border-top-right-radius: 10%;
+	border-bottom-right-radius: 10%;
+	white-space: nowrap;
+}
+
+div.priority {
+	float: right;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	cursor: pointer;
+	width: 38px;
+	height: 38px;
+	margin: auto 6px auto 2px;
+	color: #FFF;
+	text-align: center;
+	line-height: 1.25em;
+	font-family: sans-serif;
+}
+
+div.priority::before {
+	content: "\2606";
+}
+
+.priority-A {
+	background-color: dodgerblue;
+}
+
+.priority-B {
+	background-color: deepskyblue;
+	color: red;
+}
+
+.priority-C {
+	background-color: powderblue;
+}
+
+input[type="text"]:focus {
+	outline: 1px solid black;
+}
+
+button:focus {
+	outline: 1px solid blue;
+}
+
