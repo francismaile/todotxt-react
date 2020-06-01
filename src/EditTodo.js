@@ -2,25 +2,13 @@ import React from 'react'
 
 export default function EditTodo({todo, projects, contexts}) {
 
-	function ProjectSelect({projects}) {
-		let keyIndex = 0
-		return (
-			<label htmlFor="project">
-				<select id="project">
-					{ projects.map( curr =>
-							<option key={curr.substring(0,3) + keyIndex++}>{curr}</option>
-					) }
-				</select>
-			</label>
-		)
-	}
 
-	function ContextSelect({contexts}) {
+	function Select({id, labelText, options}) {
 		let keyIndex = 0
 		return (
-			<label htmlFor="context">
-				<select id="context">
-					{ contexts.map( curr => {
+			<label htmlFor={id}>{labelText}:&nbsp;
+				<select id={id}>
+					{ options.map( curr => {
 						return ( <option key={curr.substring(0,3) + keyIndex++}>{curr}</option> )
 					}
 					) }
@@ -33,8 +21,8 @@ export default function EditTodo({todo, projects, contexts}) {
 		<div id="edit-form">
 			<form>
 				<input type="text" value={todo.description} />
-						<ProjectSelect projects={projects}/>
-						<ContextSelect contexts={contexts}/>
+				<Select id='project' labelText='Project' options={projects}/>
+				<Select id='context' labelText='Context' options={contexts} />
 				<label htmlFor="created">
 					<input type="date" id="created" />
 				</label>
