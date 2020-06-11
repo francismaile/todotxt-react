@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 import Todolist from './TodoList'
 import Navigation from './Navigation'
-import EditTodo from './EditTodo'
 
 const LOCAL_TODOS = 'todoapp.todos'
 
@@ -11,7 +10,16 @@ const LOCAL_TODOS = 'todoapp.todos'
 
 function App() {
 	const [todos, setTodos] = useState([])
-	const [todoToEdit, getTodo] = useState({})
+		// TODO created and due are optional
+	const [todoToEdit, setTodoToEdit] = useState({
+		description: '',
+		priority: '',
+		completed: false,
+		project: '',
+		context: '',
+		created: new Date(),
+		due: 0
+	})
 	const todoDescrRef = useRef()
 	const [projects, setProjects] = useState([])
 	const [contexts, setContexts] = useState([])
@@ -39,23 +47,25 @@ function App() {
 		const description = todoDescrRef.current.value
 		if( description === '') return
 		// parse input in todo.txtformat
+		// TODO created and due are optional
 		setTodos(prevTodos => {
-			return [...prevTodos, 
+			return [...prevTodos,
 				{
 					priority: 'A',
 					completed: false,
 					description: description,
 					id: todos.length,
-					project: 'test3',
-					context: 'home',
+					project: 'test 3',
+					context: 'somewhere',
+					created: new Date(2020,4,8),
+					due: 0
 				}
 			]
 		})
 		todoDescrRef.current.value = null
 	}
 
-	function editTodo(todo) {
-		getTodo(todo)
+	function updateProjectList() {
 		const projectList = todos.reduce( (acc, cur) => {
 			if(cur.project && ! acc.includes(cur.project)) {
 				acc.push(cur.project)
@@ -65,6 +75,9 @@ function App() {
 			}
 		}, [] )
 		setProjects(projectList)
+	}
+
+	function updateContextList() {
 		const contextList = todos.reduce( (acc, curr) => {
 			if(curr.context && !acc.includes(curr.context) ) {
 				acc.push(curr.context)
@@ -76,6 +89,12 @@ function App() {
 		setContexts(contextList)
 	}
 
+	function editTodo(todo) {
+		setTodoToEdit(todo)
+		updateProjectList()
+		updateContextList()
+	}
+
 	function NewTodo({todoDescrRef, handleAddTodo}) {
 		return(
 			<form>
@@ -85,6 +104,25 @@ function App() {
 		)
 	}
 	
+	let keyIndex = 0;
+
+	function handleChange(e) {
+		// console.log(e.target.name)
+		// console.log(e.target.value)
+		setTodoToEdit({
+			...todoToEdit,
+			[e.target.name]: e.target.value
+		})
+	}
+	
+	
+	function formatDate(theDate) {
+		if(!theDate) return 0
+		theDate = typeof theDate === "string" ? new Date(theDate) : theDate
+		const options = {year:'numeric',month:'2-digit',day:'2-digit'}
+		const  [mm, dd, yyyy ] = theDate.toLocaleDateString('en-US', options).split('/')
+		return `${yyyy}-${mm}-${dd}`
+	}
 
 	return (
 		<div className="App">
@@ -93,7 +131,33 @@ function App() {
 				<NewTodo todoDescrRef={todoDescrRef} handleAddTodo={handleAddTodo} />
 				<Todolist todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} />
 			</div>
-			<EditTodo todo={todoToEdit} projects={projects} contexts={contexts} />
+			<div id="editTodo">
+				<form onChange={handleChange}>
+					<input type="text" name="description" value={todoToEdit.description} onChange={handleChange} />
+					<label htmlFor="project">Choose a project:</label>
+					<input onChange={handleChange} list="projects" id="project" name="project" value={todoToEdit.project} />
+					
+					<datalist id="projects" >
+						{ projects.map( curr => {
+							return ( <option key={curr.substring(0,3) + keyIndex++} value={curr} /> )
+							})
+						}
+					</datalist>
+					<label htmlFor="context">Choose a context:</label>
+					<input onChange={handleChange} list="contexts" id="context" name="context" value={todoToEdit.context} />
+					
+					<datalist id="contexts" >
+						{ contexts.map( curr => {
+							return ( <option key={curr.substring(0,3) + keyIndex++} value={curr} /> )
+							})
+						}
+					</datalist>
+					<label htmlFor="created">Created:</label>
+						<input type="date" id="created" name="created" onChange={handleChange} value={ formatDate( todoToEdit.created ) } />
+					<label htmlFor="due">Due</label>
+						<input type="date" id="due" name="due" onChange={handleChange} value={''} />
+				</form>
+			</div>
 		</div>
 	);
 }

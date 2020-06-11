@@ -33,11 +33,11 @@ export default function Todo ({todo, toggleCompleted, editTodo}) {
 
 	function handleItemClick(e) {
 		if( e.target.type  === 'checkbox' ) {
-
+			toggleCompleted(todo.id)
 		} else {
 			editTodo(todo)
 		}
-		console.log('target:', e.target, 'todo id:', todo.id)
+		// console.log('target:', e.target, 'todo id:', todo.id)
 	}
 
 	return (
