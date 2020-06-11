@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 import Todolist from './TodoList'
 import Navigation from './Navigation'
+import EditForm from './EditForm'
 
 const LOCAL_TODOS = 'todoapp.todos'
 
@@ -36,7 +37,6 @@ function App() {
 	}, [todos])
 
 	function toggleCompleted(id) {
-		// TODO refactor this to take a whole todo instead of id then lookup
 		let tasks = [...todos]
 		const task = tasks.find( task => task.id === id )
 		task.completed = !task.completed
@@ -104,17 +104,16 @@ function App() {
 		)
 	}
 	
-	let keyIndex = 0;
+	/*
+	 logic for EditForm
+	*/
 
 	function handleChange(e) {
-		// console.log(e.target.name)
-		// console.log(e.target.value)
 		setTodoToEdit({
 			...todoToEdit,
 			[e.target.name]: e.target.value
 		})
 	}
-	
 	
 	function formatDate(theDate) {
 		if(!theDate) return 0
@@ -124,6 +123,15 @@ function App() {
 		return `${yyyy}-${mm}-${dd}`
 	}
 
+	function handleSubmit(e) {
+		e.preventDefault()
+		console.log(todoToEdit)
+		const todoIndex = todos.findIndex( todo => todo.id === todoToEdit.id )
+		console.log(todoIndex)
+	}
+
+	/* end EditForm */
+
 	return (
 		<div className="App">
 			<Navigation tempContent={"Navigation"}/>
@@ -131,33 +139,7 @@ function App() {
 				<NewTodo todoDescrRef={todoDescrRef} handleAddTodo={handleAddTodo} />
 				<Todolist todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} />
 			</div>
-			<div id="editTodo">
-				<form onChange={handleChange}>
-					<input type="text" name="description" value={todoToEdit.description} onChange={handleChange} />
-					<label htmlFor="project">Choose a project:</label>
-					<input onChange={handleChange} list="projects" id="project" name="project" value={todoToEdit.project} />
-					
-					<datalist id="projects" >
-						{ projects.map( curr => {
-							return ( <option key={curr.substring(0,3) + keyIndex++} value={curr} /> )
-							})
-						}
-					</datalist>
-					<label htmlFor="context">Choose a context:</label>
-					<input onChange={handleChange} list="contexts" id="context" name="context" value={todoToEdit.context} />
-					
-					<datalist id="contexts" >
-						{ contexts.map( curr => {
-							return ( <option key={curr.substring(0,3) + keyIndex++} value={curr} /> )
-							})
-						}
-					</datalist>
-					<label htmlFor="created">Created:</label>
-						<input type="date" id="created" name="created" onChange={handleChange} value={ formatDate( todoToEdit.created ) } />
-					<label htmlFor="due">Due</label>
-						<input type="date" id="due" name="due" onChange={handleChange} value={''} />
-				</form>
-			</div>
+			<EditForm todoToEdit={todoToEdit} projects={projects} contexts={contexts} handleChange={handleChange} formatDate={formatDate} handleSubmit={handleSubmit}/>
 		</div>
 	);
 }

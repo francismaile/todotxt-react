@@ -33,18 +33,19 @@ export default function Todo ({todo, toggleCompleted, editTodo}) {
 
 	function handleItemClick(e) {
 		if( e.target.type  === 'checkbox' ) {
+			console.log("check")
 			toggleCompleted(todo.id)
 		} else {
 			editTodo(todo)
 		}
-		// console.log('target:', e.target, 'todo id:', todo.id)
+		console.log('target:', e.target, 'todo id:', todo.id)
 	}
 
 	return (
 		<div className="todoItem" onClick={handleItemClick} >
 				<div className="priority {'priority' + todo.priority}" >{todo.priority}</div>
 			<label className="css-label">
-				<input type="checkbox" className="css-checkbox" checked={todo.completed} onChange={handleCheckBoxClick} />
+				<input type="checkbox" className="css-checkbox" checked={todo.completed} />
 			</label>
 				{todo.description}
 			<div className="task-meta">
