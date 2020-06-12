@@ -6,10 +6,10 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 
 	return (
 			<div id="editTodo">
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} >
 					<input type="text" name="description" value={todoToEdit.description} onChange={handleChange} />
 					<label htmlFor="project">Choose a project:</label>
-					<input onChange={handleChange} list="projects" id="project" name="project" value={todoToEdit.project} />
+					<input onChange={handleChange} list="projects" id="project" name="project" value={todoToEdit.project} spellCheck="false" />
 					
 					<datalist id="projects" >
 						{ projects.map( curr => {
@@ -18,7 +18,7 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 						}
 					</datalist>
 					<label htmlFor="context">Choose a context:</label>
-					<input onChange={handleChange} list="contexts" id="context" name="context" value={todoToEdit.context} />
+					<input onChange={handleChange} list="contexts" id="context" name="context" value={todoToEdit.context} spellCheck="false"/>
 					
 					<datalist id="contexts" >
 						{ contexts.map( curr => {
@@ -29,7 +29,7 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 					<label htmlFor="created">Created:</label>
 						<input type="date" id="created" name="created" onChange={handleChange} value={ formatDate( todoToEdit.created ) } />
 					<label htmlFor="due">Due</label>
-						<input type="date" id="due" name="due" onChange={handleChange} value={''} />
+						<input type="date" id="due" name="due" onChange={handleChange} value={ formatDate( todoToEdit.due ) } />
 					<br />
 					<input type="submit" value="Update" />
 				</form>

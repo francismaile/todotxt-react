@@ -10,8 +10,10 @@ const LOCAL_TODOS = 'todoapp.todos'
 // keep track of context names
 
 function App() {
+
 	const [todos, setTodos] = useState([])
 		// TODO created and due are optional
+	const [editFormVisible, setEditFormVisible] = useState(false)
 	const [todoToEdit, setTodoToEdit] = useState({
 		description: '',
 		priority: '',
@@ -19,7 +21,7 @@ function App() {
 		project: '',
 		context: '',
 		created: new Date(),
-		due: 0
+		due: ''
 	})
 	const todoDescrRef = useRef()
 	const [projects, setProjects] = useState([])
@@ -58,7 +60,7 @@ function App() {
 					project: 'test 3',
 					context: 'somewhere',
 					created: new Date(2020,4,8),
-					due: 0
+					due: ''
 				}
 			]
 		})
@@ -89,17 +91,11 @@ function App() {
 		setContexts(contextList)
 	}
 
-	function editTodo(todo) {
-		setTodoToEdit(todo)
-		updateProjectList()
-		updateContextList()
-	}
-
 	function NewTodo({todoDescrRef, handleAddTodo}) {
 		return(
-			<form>
+			<form onSubmit={ e => e.preventDefault() }>
 				<input ref={todoDescrRef} type="text" size="150"/>
-				<button onClick={handleAddTodo} >Add Todo</button>
+				<button type="submit" onClick={handleAddTodo} >Add Todo</button>
 			</form>
 		)
 	}
@@ -107,6 +103,14 @@ function App() {
 	/*
 	 logic for EditForm
 	*/
+
+	function editTodo(todo) {
+		// auto focus description field
+		setTodoToEdit(todo)
+		updateProjectList()
+		updateContextList()
+		setEditFormVisible(true)
+	}
 
 	function handleChange(e) {
 		setTodoToEdit({
@@ -116,18 +120,21 @@ function App() {
 	}
 	
 	function formatDate(theDate) {
-		if(!theDate) return 0
+		if(!theDate) return ''
 		theDate = typeof theDate === "string" ? new Date(theDate) : theDate
-		const options = {year:'numeric',month:'2-digit',day:'2-digit'}
-		const  [mm, dd, yyyy ] = theDate.toLocaleDateString('en-US', options).split('/')
-		return `${yyyy}-${mm}-${dd}`
+		return theDate.toISOString().split('T')[0]
 	}
 
 	function handleSubmit(e) {
+		// TODO validation: project and context names must be camelCase or single word
+		// TODO tab updates and moves to next field, enter updates and hides form
+		
 		e.preventDefault()
-		console.log(todoToEdit)
-		const todoIndex = todos.findIndex( todo => todo.id === todoToEdit.id )
-		console.log(todoIndex)
+		const tasks = [...todos]
+		const editIndex = todos.findIndex( todo => todo.id === todoToEdit.id )
+		tasks[editIndex] = todoToEdit
+		setTodos(tasks)
+		setEditFormVisible(false)
 	}
 
 	/* end EditForm */
@@ -139,7 +146,15 @@ function App() {
 				<NewTodo todoDescrRef={todoDescrRef} handleAddTodo={handleAddTodo} />
 				<Todolist todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} />
 			</div>
-			<EditForm todoToEdit={todoToEdit} projects={projects} contexts={contexts} handleChange={handleChange} formatDate={formatDate} handleSubmit={handleSubmit}/>
+		{ editFormVisible &&
+			<EditForm
+				todoToEdit={todoToEdit}
+				projects={projects}
+				contexts={contexts}
+				handleChange={handleChange}
+				formatDate={formatDate}
+				handleSubmit={handleSubmit}
+			/> }
 		</div>
 	);
 }
