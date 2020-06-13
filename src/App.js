@@ -23,7 +23,7 @@ function App() {
 		created: new Date(),
 		due: ''
 	})
-	const todoDescrRef = useRef()
+	const newTodo = useRef()
 	const [projects, setProjects] = useState([])
 	const [contexts, setContexts] = useState([])
 
@@ -44,27 +44,46 @@ function App() {
 		task.completed = !task.completed
 		setTodos(tasks)
 	}
-
+/*
 	function handleAddTodo(e) {
-		const description = todoDescrRef.current.value
-		if( description === '') return
-		// parse input in todo.txtformat
-		// TODO created and due are optional
-		setTodos(prevTodos => {
-			return [...prevTodos,
-				{
-					priority: 'A',
-					completed: false,
-					description: description,
-					id: todos.length,
-					project: 'test 3',
-					context: 'somewhere',
-					created: new Date(2020,4,8),
-					due: ''
-				}
-			]
-		})
-		todoDescrRef.current.value = null
+		if(e.keyCode === 13 || e.target.id === 'addTodoButton') {
+			const name = todoNameRef.current.value
+			if( name === '') return
+			setTodos(prevTodos => {
+				return [...prevTodos, { id: uuidv4(), name: name, complete: false}]
+			})
+			todoNameRef.current.value = null
+			todoNameRef.current.focus()
+		} else {
+		}
+	}
+
+ */
+	function handleAddTodo(e) {
+		if(e.keyCode === 13 || e.target.id === 'addTodoButton') {
+			const newTodoText = newTodo.current.value
+			if( newTodoText === '') return
+			// TODO parse input in todo.txtformat
+			// TODO created and due are optional
+			// TODO more than one context possible
+			// TODO more than one project possible
+			setTodos(prevTodos => {
+				return [...prevTodos,
+					{
+						priority: 'A',
+						completed: false,
+						description: newTodoText,
+						id: todos.length,
+						project: 'test 3',
+						context: 'somewhere',
+						created: new Date(2020,4,8),
+						due: ''
+					}
+				]
+			})
+			newTodo.current.value = null
+			newTodo.current.focus()
+		}
 	}
 
 	function updateProjectList() {
@@ -91,15 +110,6 @@ function App() {
 		setContexts(contextList)
 	}
 
-	function NewTodo({todoDescrRef, handleAddTodo}) {
-		return(
-			<form onSubmit={ e => e.preventDefault() }>
-				<input ref={todoDescrRef} type="text" size="150"/>
-				<button type="submit" onClick={handleAddTodo} >Add Todo</button>
-			</form>
-		)
-	}
-	
 	/*
 	 logic for EditForm
 	*/
@@ -125,7 +135,7 @@ function App() {
 		return theDate.toISOString().split('T')[0]
 	}
 
-	function handleSubmit(e) {
+	function handleUpdateTodo(e) {
 		// TODO validation: project and context names must be camelCase or single word
 		// TODO tab updates and moves to next field, enter updates and hides form
 		
@@ -143,7 +153,8 @@ function App() {
 		<div className="App">
 			<Navigation tempContent={"Navigation"}/>
 			<div id="todo-list">
-				<NewTodo todoDescrRef={todoDescrRef} handleAddTodo={handleAddTodo} />
+				<input ref={newTodo} onKeyDown={handleAddTodo} type="text" size="150"/>
+				<button onClick={handleAddTodo} id="addTodoButton">Add Todo</button>
 				<Todolist todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} />
 			</div>
 		{ editFormVisible &&
@@ -153,7 +164,7 @@ function App() {
 				contexts={contexts}
 				handleChange={handleChange}
 				formatDate={formatDate}
-				handleSubmit={handleSubmit}
+				handleUpdateTodo={handleUpdateTodo}
 			/> }
 		</div>
 	);

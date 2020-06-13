@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function EditTodo({todoToEdit, projects, contexts, handleChange, formatDate, handleSubmit}) {
+export default function EditTodo({todoToEdit, projects, contexts, handleChange, formatDate, handleUpdateTodo}) {
 
 	let keyIndex = 0;
 
 	return (
 			<div id="editTodo">
-				<form onSubmit={handleSubmit} >
+				<form onSubmit={handleUpdateTodo} >
 					<input type="text" name="description" value={todoToEdit.description} onChange={handleChange} />
 					<label htmlFor="project">Choose a project:</label>
 					<input onChange={handleChange} list="projects" id="project" name="project" value={todoToEdit.project} spellCheck="false" />
