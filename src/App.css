@@ -6,6 +6,7 @@
 
 #navigation {
 	border: thin solid;
+	cursor: pointer;
 }
 
 #todo-list {
@@ -24,7 +25,8 @@
 	*/
 	border: solid gray thin;
 	margin-top: 6px;
-	/* max-height: 30px;*/
+	max-height: 40px;
+	height: 40px;
 	padding: 6px;
 	font-size: 12pt;
 	cursor: pointer;
@@ -51,6 +53,7 @@ div.task-meta {
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: flex-start;
+	align-items: center;
 }
 
 .task-meta .project {
@@ -59,6 +62,14 @@ div.task-meta {
 
 .task-meta .context {
 	margin-left: 6px;
+}
+
+.task-meta .due {
+	margin-left: 6px;
+}
+
+.task-meta .due span {
+	margin-right: 2px;
 }
 
 .task-meta .custom-tags {
@@ -101,7 +112,7 @@ div.priority {
 	width: 38px;
 	height: 38px;
 	margin: auto 6px auto 2px;
-	color: #FFF;
+	color: black;
 	text-align: center;
 	line-height: 1.25em;
 	font-family: sans-serif;
@@ -111,17 +122,8 @@ div.priority::before {
 	content: "\2606";
 }
 
-.priority-A {
-	background-color: dodgerblue;
-}
-
-.priority-B {
-	background-color: deepskyblue;
-	color: red;
-}
-
-.priority-C {
-	background-color: powderblue;
+div.priority_set::before {
+	content: "\2605";
 }
 
 input[type="text"]:focus {

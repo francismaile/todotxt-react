@@ -12,7 +12,7 @@ const LOCAL_TODOS = 'todoapp.todos'
 function App() {
 
 	const [todos, setTodos] = useState([])
-		// TODO created and due are optional
+		// TODO due is optional
 	const [editFormVisible, setEditFormVisible] = useState(false)
 	const [todoToEdit, setTodoToEdit] = useState({
 		description: '',
@@ -23,9 +23,14 @@ function App() {
 		created: new Date(),
 		due: ''
 	})
-	const newTodo = useRef()
+	const newTodoRef = useRef()
 	const [projects, setProjects] = useState([])
 	const [contexts, setContexts] = useState([])
+
+	function buildNavMenu() {
+		updateProjectList()
+		updateContextList()
+	}
 
 	useEffect( () => {
 		const storedTodos = JSON.parse(localStorage.getItem(LOCAL_TODOS))
@@ -44,45 +49,58 @@ function App() {
 		task.completed = !task.completed
 		setTodos(tasks)
 	}
-/*
-	function handleAddTodo(e) {
-		if(e.keyCode === 13 || e.target.id === 'addTodoButton') {
-			const name = todoNameRef.current.value
-			if( name === '') return
-			setTodos(prevTodos => {
-				return [...prevTodos, { id: uuidv4(), name: name, complete: false}]
-			})
-			todoNameRef.current.value = null
-			todoNameRef.current.focus()
-		} else {
+// x (A) 2020-06-13 2020-06-12 Task description +project @context due:2020-06-13 tag:custom
+
+	function parseTodo(todoTxt) {
+		let newTodoTxt = todoTxt.trim()
+		const newTodo = {
+			priority: '',
+			completed: false,
+			description: '',
+			id: todos.length,
+			project: '',
+			context: '',
+			created: new Date(),
+			due: ''
 		}
+		// determine if marked with a priority. currently limited to one of A, B , or C
+		newTodoTxt = newTodoTxt.replace(/\([A-C]\)\s+/, match => {
+			newTodo.priority = match[1];
+			return '';
+		});
+		// get todo item's project connection
+		newTodoTxt = newTodoTxt.replace(/\+\w+/i, match => {
+			newTodo.project = match.slice(1);
+			return '';
+		});
+		// get todo item's context
+		newTodoTxt = newTodoTxt.replace(/@\w+/i, match => {
+			newTodo.context = match.slice(1);
+			return '';
+		});
+		// get todo item's context
+		newTodoTxt = newTodoTxt.replace(/\w+:\d{4}-\d{1,2}-\d{1,2}/i, match => {
+			newTodo.due = match.split(':')[1];
+			return '';
+		});
+		newTodo.description = newTodoTxt
+		return newTodo
 	}
 
- */
 	function handleAddTodo(e) {
 		if(e.keyCode === 13 || e.target.id === 'addTodoButton') {
-			const newTodoText = newTodo.current.value
+			const newTodoText = newTodoRef.current.value
+			// const newTodo = (parseTodo(newTodoText))
 			if( newTodoText === '') return
-			// TODO parse input in todo.txtformat
+			// TODO validate todo.txt format
 			// TODO created and due are optional
 			// TODO more than one context possible
 			// TODO more than one project possible
 			setTodos(prevTodos => {
-				return [...prevTodos,
-					{
-						priority: 'A',
-						completed: false,
-						description: newTodoText,
-						id: todos.length,
-						project: 'test 3',
-						context: 'somewhere',
-						created: new Date(2020,4,8),
-						due: ''
-					}
-				]
+				return [...prevTodos, parseTodo(newTodoText)]
 			})
-			newTodo.current.value = null
-			newTodo.current.focus()
+			newTodoRef.current.value = null
+			newTodoRef.current.focus()
 		}
 	}
 
@@ -108,6 +126,22 @@ function App() {
 			}
 		}, [] )
 		setContexts(contextList)
+	}
+
+	function changePriority(currentPriority, todoId) {
+		if(currentPriority === '') {
+			currentPriority = 'A'
+		} else if(currentPriority === 'A') {
+			currentPriority = 'B'
+		} else if(currentPriority === 'B') {
+			currentPriority = 'C'
+		} else {
+			currentPriority = ''
+		}
+		const tasks = [...todos]
+		const editIndex = todos.findIndex( todo => todo.id === todoId )
+		tasks[editIndex].priority = currentPriority
+		setTodos(tasks)
 	}
 
 	/*
@@ -151,11 +185,11 @@ function App() {
 
 	return (
 		<div className="App">
-			<Navigation tempContent={"Navigation"}/>
+			<Navigation projects={projects} contexts={contexts} tempContent={"Navigation"}/>
 			<div id="todo-list">
-				<input ref={newTodo} onKeyDown={handleAddTodo} type="text" size="150"/>
+				<input ref={newTodoRef} onKeyDown={handleAddTodo} type="text" size="150"/>
 				<button onClick={handleAddTodo} id="addTodoButton">Add Todo</button>
-				<Todolist todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} />
+				<Todolist todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
 			</div>
 		{ editFormVisible &&
 			<EditForm

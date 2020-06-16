@@ -8,6 +8,9 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 			<div id="editTodo">
 				<form onSubmit={handleUpdateTodo} >
 					<input type="text" name="description" value={todoToEdit.description} onChange={handleChange} />
+						<label htmlFor="priority_A"><input type="radio" name="priority" id="priority_A" value="A" checked={todoToEdit.priority==='A'} onChange={handleChange}  />A</label>
+						<label htmlFor="priority_B"><input type="radio" name="priority" id="priority_B" value="B" checked={todoToEdit.priority==='B'} onChange={handleChange}  />B</label>
+						<label htmlFor="priority_C"><input type="radio" name="priority" id="priority_C" value="C" checked={todoToEdit.priority==='C'} onChange={handleChange} />C</label>
 					<label htmlFor="project">Choose a project:</label>
 					<input onChange={handleChange} list="projects" id="project" name="project" value={todoToEdit.project} spellCheck="false" />
 					
