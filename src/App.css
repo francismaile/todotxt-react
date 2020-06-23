@@ -9,6 +9,18 @@
 	cursor: pointer;
 }
 
+#navigation ul {
+	border: solid thin;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#navigation ul li ul li {
+	border: solid thin;
+	padding-left: 16px;
+}
+
 #todo-list {
 	border: thin solid;
 }

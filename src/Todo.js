@@ -1,16 +1,18 @@
 import React from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 function MetaTags({tags}) {
 	if( !tags ) return null;
 	let metaTags = Array.from(tags)
-	let uniqueKey = 0;
+	// console.log("tags:", metaTags)
 	return (
 		metaTags.map( tag => {
-			const [key, value] = [Object.keys(tag)[0], tag[Object.keys(tag)[0]]]
+			// const [key, value] = Object.values(tag)
+			// console.log({uniqueKey}, {key}, {value})
 			return (
-				<div key={uniqueKey++} className="custom-tag">
-					<span className="custom-tag-key">{key}</span>
-					<span className="custom-tag-value">{value}</span>
+				<div key={uuidv4()} className="custom-tag">
+					<span className="custom-tag-key">{tag.key}</span>
+					<span className="custom-tag-value">{tag.value}</span>
 				</div>
 			)
 		})
