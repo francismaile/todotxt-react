@@ -8,13 +8,9 @@ import Todo from './Todo'
 TODO-done shift all completed todos to the bottom and hide them
 	create seperate list with completed todos
 	render that list after the todo list
-	seperate completed list for each sub-list?
 */
 
-// {tag: "project", value: "No Project"}
-
 export default function Todolist({filter, todos, toggleCompleted, handleItemClick, editTodo, changePriority}) {
-
 
 	const [activeList, completedList] = todos.reduce( (list, todo) => {
 			if(filter.tag !== 'all') {
@@ -58,10 +54,6 @@ export default function Todolist({filter, todos, toggleCompleted, handleItemClic
 				return list
 			}
 		}, [ [], [] ])
-// const [activeList, completedList] = todoList.reduce( (list, todo) => {
-// 	list[0 + todo.completed].push(todo)
-// 	return list
-// }, [ [], []] )
 	
 
 	return (
