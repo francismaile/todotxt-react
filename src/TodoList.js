@@ -4,28 +4,68 @@ import Todo from './Todo'
 // TODO-done handle no project, context or priority
 // TODO-done click menu title should list all alphabetically
 
+/*
+TODO-done shift all completed todos to the bottom and hide them
+	create seperate list with completed todos
+	render that list after the todo list
+	seperate completed list for each sub-list?
+*/
+
+// {tag: "project", value: "No Project"}
+
 export default function Todolist({filter, todos, toggleCompleted, handleItemClick, editTodo, changePriority}) {
-	const todoList = (() => {
-		if(filter.tag === 'all') {
-			return [...todos]
-		} else if(filter.which.substring(0, 3) === 'No ') {
-			return todos.filter( todo => todo[filter.tag] === '')
-		} else if(filter.which === 'all') {
-			return todos.filter( todo => todo[filter.tag] !== '').sort( (a, b) => {
-				if(a[filter.tag].toLowerCase() < b[filter.tag].toLowerCase()) {
-					return -1
-				} else if(a[filter.tag] > b[filter.tag]) {
-					return 1
+
+
+	const [activeList, completedList] = todos.reduce( (list, todo) => {
+			if(filter.tag !== 'all') {
+				if(todo[filter.tag] === filter.value) { // list todos assigned to a particular project, context or priority
+					list[0 + todo.completed].push(todo)
+					return list
+				} else if(filter.value === 'all') { // list all todos assigned to any project, context or priority
+					if(todo[filter.tag] !== '') {
+						list[0 + todo.completed].push(todo)
+					}
+					list[0].sort( (a, b) => {
+						const [first, second] = [a[filter.tag], b[filter.tag]]
+						if(first < second) return -1
+						else if(first > second) return -1
+						return 0
+					})
+					list[0].sort( (a, b) => {
+						const [first, second] = [a[filter.tag], b[filter.tag]]
+						if(first < second) return -1
+						else if(first > second) return -1
+						return 0
+					})
+					return list
+				} else if(filter.value.split(' ')[0] === 'No') { // list all todos not assigned to a project, context or priority
+					if(todo[filter.tag] === '') {
+						list[0 + todo.completed].push(todo)
+						return list
 				} else {
-					return 0
+					return list
 				}
-			})
-		} else {
-			return todos.filter( todo => todo[filter.tag] === filter.which)
-		}
-	})()
+			} else if(filter.tag === 'all') {
+					console.log('all') // why is this getting called
+				list[0 + todo.completed].push(todo)
+				return list
+				} else {
+					return list
+				}
+			} else {
+					// console.log('end') // why is this getting called
+				list[0 + todo.completed].push(todo)
+				return list
+			}
+		}, [ [], [] ])
+// const [activeList, completedList] = todoList.reduce( (list, todo) => {
+// 	list[0 + todo.completed].push(todo)
+// 	return list
+// }, [ [], []] )
+	
+
 	return (
-		todoList.map( (todo, index) => {
+		[...activeList, ...completedList].map( (todo, index) => {
 			return <Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
 		})
 	)

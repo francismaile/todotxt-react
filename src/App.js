@@ -32,7 +32,7 @@ function App() {
 	const [contexts, setContexts] = useState([])
 	const [filter, setFilter] = useState({
 		tag: 'all',
-		which:''
+		value:'all'
 	})
 
 	useEffect( () => {
@@ -77,10 +77,10 @@ function App() {
 			} else {
 				newFilter.tag = item.split(' ')[1].toLowerCase()
 			}
-			newFilter.which = 'all'
+			newFilter.value = 'all'
 		} else {
 			newFilter.tag = category.toLowerCase()
-			newFilter.which = item
+			newFilter.value = item
 		}
 		setFilter(newFilter)
 	}
@@ -157,7 +157,6 @@ function App() {
 			// newTodo.tags.push({ 'key' : key, 'value' : value })
 			newTodoTxt = newTodoTxt.replace(resultArr[0],'');
 		}
-		console.log('tags:', newTodo.tags)
 		newTodo.description = newTodoTxt.trim()
 		return newTodo
 	}
@@ -190,9 +189,8 @@ function App() {
 	}
 
 	function handleCustomTagChange(e) {
-		const tagId = e.target.id.split('_')[2]
 		const newTags = JSON.parse(JSON.stringify(todoToEdit)).tags
-		const index = newTags.findIndex( elem => elem.id === tagId )
+		const index = newTags.findIndex( elem => elem.id === e.target.id.split('_')[1] )
 		newTags[index][e.target.name] = e.target.value
 		setTodoToEdit({
 			...todoToEdit,
@@ -255,3 +253,14 @@ function App() {
 
 export default App;
 
+// TODO sorting: alpha, date due, date created, date completed
+// TODO a way to delete tasks
+// TODO do not list completed tasks by default
+// TODO allow listing of completed tasks by choice
+		// TODO due is optional
+			// TODO validate todo.txt format
+			// TODO more than one context possible
+			// TODO more than one project possible
+		// TODO auto focus description field
+		// TODO validation: project and context names must be camelCase or single word
+		// TODO tab updates and moves to next field, enter updates and hides form

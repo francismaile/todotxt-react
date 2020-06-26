@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function EditTodo({todoToEdit, projects, contexts, handleChange, handleCustomTagChange, formatDate, handleUpdateTodo, hideEditForm}) {
 
 	// TODO add "none" option for priorities
-	// TODO edit custom tags
+	// TODO-done edit custom tags
 
 
 	return (
@@ -16,6 +16,7 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 						<label htmlFor="priority_A"><input type="radio" name="priority" id="priority_A" value="A" checked={todoToEdit.priority==='A'} onChange={handleChange}  />A</label>
 						<label htmlFor="priority_B"><input type="radio" name="priority" id="priority_B" value="B" checked={todoToEdit.priority==='B'} onChange={handleChange}  />B</label>
 						<label htmlFor="priority_C"><input type="radio" name="priority" id="priority_C" value="C" checked={todoToEdit.priority==='C'} onChange={handleChange} />C</label>
+						<label htmlFor="priority_"><input type="radio" name="priority" id="priority_" value="" checked={todoToEdit.priority===''} onChange={handleChange} />None</label>
 					</fieldset>
 					<fieldset>
 						<legend>Tags</legend>
@@ -49,8 +50,8 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 									{ todoToEdit.tags.map( (tag, indx) => {
 										return (
 											<tr key={`tag${indx}`}>
-												<td><input value={tag.key} id={`meta_key_${tag.id}`} name="key" onChange={handleCustomTagChange} /></td>
-												<td><input value={tag.value} id={`meta_value_${tag.id}`} name="value" onChange={handleCustomTagChange} /></td>
+												<td><input value={tag.key} id={`key_${tag.id}`} name="key" onChange={handleCustomTagChange} /></td>
+												<td><input value={tag.value} id={`value_${tag.id}`} name="value" onChange={handleCustomTagChange} /></td>
 											</tr>
 										)
 									})}
@@ -71,3 +72,5 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 	)
 }
 
+	// TODO add "none" option for priorities
+	// TODO-done edit custom tags
