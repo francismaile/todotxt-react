@@ -26,6 +26,7 @@
 }
 
 #edit-form {
+	/* TODO make position fixed */
 	border: thin solid;
 }
 

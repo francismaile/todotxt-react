@@ -3,6 +3,7 @@ import Todo from './Todo'
 
 // TODO-done handle no project, context or priority
 // TODO-done click menu title should list all alphabetically
+// TODO when listing all todos by project, context, priority, insert header for each
 
 /*
 TODO-done shift all completed todos to the bottom and hide them
@@ -27,7 +28,7 @@ export default function Todolist({filter, todos, toggleCompleted, handleItemClic
 						else if(first > second) return -1
 						return 0
 					})
-					list[0].sort( (a, b) => {
+					list[1].sort( (a, b) => {
 						const [first, second] = [a[filter.tag], b[filter.tag]]
 						if(first < second) return -1
 						else if(first > second) return -1

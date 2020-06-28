@@ -1,16 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
+import parseTodo from './parser.js'
 import Todolist from './TodoList'
 import Navigation from './Navigation'
 import EditForm from './EditForm'
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 
 const LOCAL_TODOS = 'todoapp.todos'
 
+// TODO read and parse todo.txt file
+// TODO save todo list as todo.txt file
 // TODO sorting: alpha, date due, date created, date completed
 // TODO a way to delete tasks
 // TODO do not list completed tasks by default
 // TODO allow listing of completed tasks by choice
+
+/* Import todo.txt file
+allow multiple files
+validate file format before parsing
+store file info for later varification before download
+	*
+*/
+
 
 function App() {
 
@@ -93,6 +104,7 @@ function App() {
 	}
 	
 	function handleAddTodo(e) {
+		// TODO why is this not fired onSubmit?
 		if(e.keyCode === 13 || e.target.id === 'addTodoButton') {
 			const newTodoText = newTodoRef.current.value
 			// const newTodo = (parseTodo(newTodoText))
@@ -108,59 +120,12 @@ function App() {
 		}
 	}
 
-// x (A) 2020-06-13 2020-06-12 Task description +project @context due:2020-06-13 tag:custom
-
-	function parseTodo(todoTxt) {
-		let newTodoTxt = todoTxt.trim()
-		const newTodo = {
-			priority: '',
-			completed: false,
-			description: '',
-			id: uuidv4(),
-			project: '',
-			context: '',
-			created: new Date(),
-			due: ''
-		}
-		// determine if marked with a priority. currently limited to one of A, B , or C
-		newTodoTxt = newTodoTxt.replace(/\([A-C]\)\s+/, match => {
-			newTodo.priority = match[1];
-			return '';
-		});
-		// get todo item's project connection
-		newTodoTxt = newTodoTxt.replace(/\+\w+/i, match => {
-			newTodo.project = match.slice(1);
-			return '';
-		});
-		// get todo item's context
-		newTodoTxt = newTodoTxt.replace(/@\w+/i, match => {
-			newTodo.context = match.slice(1);
-			return '';
-		});
-		// get todo item's context
-		newTodoTxt = newTodoTxt.replace(/due:\d{4}-\d{1,2}-\d{1,2}/i, match => {
-			newTodo.due = match.split(':')[1];
-			return '';
-		});
-		// get all custom tags
-		const regex = /\w+:\d{4}-\d{1,2}-\d{1,2}|\w+:\w+/i;
-		let resultArr = [];
-		newTodo.tags = []
-		while( (resultArr = regex.exec(newTodoTxt)) != null ) {
-			let key, value;
-			[key, value] = resultArr[0].split(':');
-			newTodo.tags.push({
-				'id' : uuidv4(),
-				'key' : key,
-				'value' : value,
-			})
-			// newTodo.tags.push({ 'key' : key, 'value' : value })
-			newTodoTxt = newTodoTxt.replace(resultArr[0],'');
-		}
-		newTodo.description = newTodoTxt.trim()
-		return newTodo
+	function parseTodoTxt(text) {
+		const newTodos = [...text.split('\n')].filter( newTodo => newTodo !== '' ).map( newTodo => parseTodo(newTodo) )
+		setTodos(prevTodos => {
+			return [...prevTodos, ...newTodos]
+		})
 	}
-
 
 	function changePriority(currentPriority, todoId) {
 		if(currentPriority === '') {
@@ -230,7 +195,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<Navigation filterTodos={filterTodos} projects={projects} contexts={contexts} />
+			<Navigation filterTodos={filterTodos} projects={projects} contexts={contexts} parseTodoTxt={parseTodoTxt}/>
 			<div id="todo-list">
 				<input ref={newTodoRef} onKeyDown={handleAddTodo} type="text" size="150"/>
 				<button onClick={handleAddTodo} id="addTodoButton">Add Todo</button>

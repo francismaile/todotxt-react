@@ -1,6 +1,7 @@
 import React from 'react'
+import ImportTodoTxt from './ImportTodoTxt'
 
-export default function Navigation({filterTodos, projects, contexts}) {
+export default function Navigation({filterTodos, projects, contexts, parseTodoTxt}) {
 
 
 	function NavMenu({menuName, list}) {
@@ -27,6 +28,7 @@ export default function Navigation({filterTodos, projects, contexts}) {
 			<li><NavMenu menuName='Priority' list={['A', 'B', 'C']}  /></li>
 			<li>Text</li>
 		</ul>
+		<ImportTodoTxt parseTodoTxt={parseTodoTxt} />
 		</div>
 	)
 }
