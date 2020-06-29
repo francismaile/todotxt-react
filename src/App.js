@@ -191,6 +191,13 @@ function App() {
 	function hideEditForm() {
 		setEditFormVisible(false)
 	}
+
+	function deleteTodo() {
+		let tasks = [...todos]
+		const deleteIndex = tasks.findIndex( todo => todo.id === todoToEdit.id )
+		tasks.splice(deleteIndex, 1)
+		setTodos(tasks)
+	}
 	/* end EditForm */
 
 	return (
@@ -211,6 +218,7 @@ function App() {
 				formatDate={formatDate}
 				handleUpdateTodo={handleUpdateTodo}
 				hideEditForm={hideEditForm}
+				deleteTodo={deleteTodo}
 			/> }
 		</div>
 	);
@@ -219,7 +227,7 @@ function App() {
 export default App;
 
 // TODO sorting: alpha, date due, date created, date completed
-// TODO a way to delete tasks
+// TODO-done a way to delete tasks
 // TODO do not list completed tasks by default
 // TODO allow listing of completed tasks by choice
 		// TODO due is optional
@@ -229,3 +237,4 @@ export default App;
 		// TODO auto focus description field
 		// TODO validation: project and context names must be camelCase or single word
 		// TODO tab updates and moves to next field, enter updates and hides form
+// TODO done.txt file for completed todos

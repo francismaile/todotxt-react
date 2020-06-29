@@ -1,7 +1,7 @@
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
-export default function EditTodo({todoToEdit, projects, contexts, handleChange, handleCustomTagChange, formatDate, handleUpdateTodo, hideEditForm}) {
+export default function EditTodo({todoToEdit, projects, contexts, handleChange, handleCustomTagChange, formatDate, handleUpdateTodo, hideEditForm, deleteTodo}) {
 
 	// TODO add "none" option for priorities
 	// TODO-done edit custom tags
@@ -67,6 +67,7 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 					<br />
 					<input onClick={hideEditForm} type="button" value="Close" />
 					<input type="submit" value="Update" />
+					<input onClick={deleteTodo} type="button" value="Delete" />
 				</form>
 			</div>
 	)
