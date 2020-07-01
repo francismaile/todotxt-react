@@ -73,5 +73,3 @@ export default function EditTodo({todoToEdit, projects, contexts, handleChange, 
 	)
 }
 
-	// TODO add "none" option for priorities
-	// TODO-done edit custom tags

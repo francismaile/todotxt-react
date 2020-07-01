@@ -4,11 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 function MetaTags({tags}) {
 	if( !tags ) return null;
 	let metaTags = Array.from(tags)
-	// console.log("tags:", metaTags)
 	return (
 		metaTags.map( tag => {
-			// const [key, value] = Object.values(tag)
-			// console.log({uniqueKey}, {key}, {value})
 			return (
 				<div key={uuidv4()} className="custom-tag">
 					<span className="custom-tag-key">{tag.key}</span>
@@ -19,14 +16,9 @@ function MetaTags({tags}) {
 	)
 }
 
-// TODO
-// only if due date, produce due date component
-// only if custom tags, produce custom tags
-// only if completed, produce completed component
-
 export default function Todo ({todo, toggleCompleted, editTodo, changePriority}) {
 
-	function handleItemClick(e) {
+	function handleItemClick(e) { // TODO move this to app.js
 		if( e.target.type  === 'checkbox' ) {
 			toggleCompleted(todo.id)
 		} else if(e.target.id === 'priority') {

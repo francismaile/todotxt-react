@@ -45,6 +45,26 @@
 	cursor: pointer;
 }
 
+.tag-header {
+	margin-top: 6px;
+	border: solid thin;
+	background: #F0F0F0;
+	text-align: center;
+}
+.toggleShowCompleted {
+	 width: 100%;
+	 text-align: center;
+	 border-bottom: 1px solid #000;
+	 line-height: 0.1em;
+	 margin: 20px 0 20px;
+	 cursor: pointer;
+}
+
+.toggleShowCompleted span {
+	background:#fff;
+	padding:0 10px;
+}
+
 label {
 	display: block;
 

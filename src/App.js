@@ -8,15 +8,7 @@ import EditForm from './EditForm'
 
 const LOCAL_TODOS = 'todoapp.todos'
 
-// TODO read and parse todo.txt file
-// TODO save todo list as todo.txt file
-// TODO sorting: alpha, date due, date created, date completed
-// TODO a way to delete tasks
-// TODO do not list completed tasks by default
-// TODO allow listing of completed tasks by choice
-
 /* Import todo.txt file
-allow multiple files
 validate file format before parsing
 store file info for later varification before download
 	*
@@ -26,7 +18,6 @@ store file info for later varification before download
 function App() {
 
 	const [todos, setTodos] = useState([])
-		// TODO due is optional
 	const [editFormVisible, setEditFormVisible] = useState(false)
 	const [todoToEdit, setTodoToEdit] = useState({
 		description: '',
@@ -45,6 +36,7 @@ function App() {
 		tag: 'all',
 		value:'all'
 	})
+	const [showCompleted, setShowCompleted] = useState(false)
 
 	useEffect( () => {
 		const storedTodos = JSON.parse(localStorage.getItem(LOCAL_TODOS))
@@ -109,9 +101,6 @@ function App() {
 			const newTodoText = newTodoRef.current.value
 			// const newTodo = (parseTodo(newTodoText))
 			if( newTodoText === '') return
-			// TODO validate todo.txt format
-			// TODO more than one context possible
-			// TODO more than one project possible
 			setTodos(prevTodos => {
 				return [...prevTodos, parseTodo(newTodoText)]
 			})
@@ -143,6 +132,10 @@ function App() {
 		setTodos(tasks)
 	}
 
+	function toggleShowCompleted() {
+		setShowCompleted(!showCompleted)
+	}
+	
 	/*
 	 logic for EditForm
 	*/
@@ -198,6 +191,7 @@ function App() {
 		tasks.splice(deleteIndex, 1)
 		setTodos(tasks)
 	}
+
 	/* end EditForm */
 
 	return (
@@ -206,7 +200,7 @@ function App() {
 			<div id="todo-list">
 				<input ref={newTodoRef} onKeyDown={handleAddTodo} type="text" size="150"/>
 				<button onClick={handleAddTodo} id="addTodoButton">Add Todo</button>
-				<Todolist filter={filter} todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
+				<Todolist toggleShowCompleted={toggleShowCompleted} showCompleted={showCompleted} filter={filter} todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
 			</div>
 		{ editFormVisible &&
 			<EditForm
@@ -225,16 +219,3 @@ function App() {
 }
 
 export default App;
-
-// TODO sorting: alpha, date due, date created, date completed
-// TODO-done a way to delete tasks
-// TODO do not list completed tasks by default
-// TODO allow listing of completed tasks by choice
-		// TODO due is optional
-			// TODO validate todo.txt format
-			// TODO more than one context possible
-			// TODO more than one project possible
-		// TODO auto focus description field
-		// TODO validation: project and context names must be camelCase or single word
-		// TODO tab updates and moves to next field, enter updates and hides form
-// TODO done.txt file for completed todos
