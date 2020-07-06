@@ -3,10 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function EditTodo({todoToEdit, projects, contexts, handleChange, handleCustomTagChange, formatDate, handleUpdateTodo, hideEditForm, deleteTodo}) {
 
-	// TODO add "none" option for priorities
-	// TODO-done edit custom tags
-
-
 	return (
 			<div id="editTodo">
 				<form onSubmit={handleUpdateTodo} >

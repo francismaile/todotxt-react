@@ -1,41 +1,70 @@
 .App {
+	position: fixed;
+	width: 100%;
+}
+
+#wrapper {
 	min-height: 800px;
-	display: grid;
-	grid-template-columns: 200px 4fr 2fr;
+	display: flex;
 }
 
 #navigation {
-	border: thin solid;
+	flex-grow: 0;
+	flex-basis: auto;
 	cursor: pointer;
+	height: 100vh;
+	width: fit-content;
+	min-width: fit-content;
+	padding: 0 10px 0 0;
 }
 
 #navigation ul {
-	border: solid thin;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
 
 #navigation ul li ul li {
-	border: solid thin;
 	padding-left: 16px;
 }
 
+#navigation ul li ul li:hover {
+	background: #C0C0C0;
+}
+
+#navigation ul li ul div:hover {
+	width: 100%;
+	display: inline-block;
+	background: #C0C0C0;
+}
+
+#add-todo {
+	position: relative;
+	display: inline;
+	width: 90%;
+	margin: 0;
+	padding: 10px 0 10px 8px;;
+	font-size: 18px;
+}
+
 #todo-list {
+	flex-grow: 2;
 	border: thin solid;
+}
+
+#todos {
+	overflow: auto;
+	height: 93vh;
 }
 
 #edit-form {
-	/* TODO make position fixed */
+	flex-grow: 3;
 	border: thin solid;
+	height: 100vh;
+	width: 50vw;
 }
 
 .todoItem {
-	/*
-	display: flex;
-	flex-flow: row nowrap;
-	flex-direction: column;
-	*/
 	border: solid gray thin;
 	margin-top: 6px;
 	max-height: 40px;

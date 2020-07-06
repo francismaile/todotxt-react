@@ -10,8 +10,8 @@ export default function parseTodo(todoTxt) {
 			completed: false,
 			description: '',
 			id: uuidv4(),
-			project: '',
-			context: '',
+			project: [],
+			context: [],
 			created: new Date(),
 			due: ''
 		}
@@ -25,13 +25,13 @@ export default function parseTodo(todoTxt) {
 			return '';
 		});
 		// get todo item's project connection
-		newTodoTxt = newTodoTxt.replace(/\+\w+/i, match => {
-			newTodo.project = match.slice(1);
+		newTodoTxt = newTodoTxt.replace(/\+\w+/gi, match => {
+			newTodo.project.push(match.slice(1))
 			return '';
 		});
 		// get todo item's context
-		newTodoTxt = newTodoTxt.replace(/@\w+/i, match => {
-			newTodo.context = match.slice(1);
+		newTodoTxt = newTodoTxt.replace(/@\w+/gi, match => {
+			newTodo.context.push(match.slice(1))
 			return '';
 		});
 		// get todo item's context

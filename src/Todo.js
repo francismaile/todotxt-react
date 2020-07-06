@@ -36,8 +36,20 @@ export default function Todo ({todo, toggleCompleted, editTodo, changePriority})
 			</label>
 				{todo.description}
 			<div className="task-meta">
-				{ todo.project && <div id="project" className="project">+{ todo.project }</div> }
-				{ todo.context && <div id="context" className="context">@{ todo.context }</div> }
+				{ todo.project.length !== 0 && 
+					todo.project.map( project => {
+						return (
+							<div key={uuidv4()} className="project">+{ project }</div>
+						)
+					})
+				}
+				{ todo.context.length !== 0 && 
+					todo.context.map( context => {
+						return (
+							<div key={uuidv4()} className="context">@{ context }</div>
+						)
+					})
+				}
 				{ todo.due && <div id="due" className="due"><span role="img" aria-label="calendar page">&#128198;</span>{ todo.due }</div> }
 				<div className="custom-tags">
 					<MetaTags tags={todo.tags} />

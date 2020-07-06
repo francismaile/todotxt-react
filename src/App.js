@@ -8,7 +8,7 @@ import EditForm from './EditForm'
 
 const LOCAL_TODOS = 'todoapp.todos'
 
-/* Import todo.txt file
+/*
 validate file format before parsing
 store file info for later varification before download
 	*
@@ -23,8 +23,8 @@ function App() {
 		description: '',
 		priority: '',
 		completed: false,
-		project: '',
-		context: '',
+		project: [],
+		context: [],
 		created: new Date(),
 		due: '',
 		tags: []
@@ -50,18 +50,23 @@ function App() {
 	}, [todos])
 
 	useEffect( () => {
-		const projectList = todos.reduce( (acc, cur) => {
-			if(cur.project && ! acc.includes(cur.project)) {
-				acc.push(cur.project)
+		const tasks = [...todos]
+		const projectList = tasks.reduce( (acc, cur) => {
+			if(cur.project && ! cur.project.some( project => acc.includes(project)) ) {
+				cur.project.forEach( project => {
+					acc.push(project)
+				})
 				return acc
 			} else {
 				return acc
 			}
 		}, [] )
 		setProjects(projectList)
-		const contextList = todos.reduce( (acc, curr) => {
-			if(curr.context && !acc.includes(curr.context) ) {
-				acc.push(curr.context)
+		const contextList = tasks.reduce( (acc, cur) => {
+			if(cur.context && ! cur.context.some( context => acc.includes(context)) ) {
+				cur.context.forEach( context => {
+					acc.push(context)
+				})
 				return acc
 			} else {
 				return acc
@@ -71,6 +76,8 @@ function App() {
 	},[todos])
 
 	function filterTodos(e) {
+		// console.log(e.target.textContent)
+		// console.log(e.target.parentNode.firstChild.textContent)
 		const item = e.target.textContent
 		const category = e.target.parentNode.firstChild.textContent
 		const newFilter = {...filter}
@@ -78,7 +85,7 @@ function App() {
 			if(item === 'All') {
 				newFilter.tag = item.toLowerCase()
 			} else {
-				newFilter.tag = item.split(' ')[1].toLowerCase()
+				newFilter.tag = item.toLowerCase() // WTF?? FIXME
 			}
 			newFilter.value = 'all'
 		} else {
@@ -86,6 +93,7 @@ function App() {
 			newFilter.value = item
 		}
 		setFilter(newFilter)
+		hideEditForm()
 	}
 	
 	function toggleCompleted(id) {
@@ -136,9 +144,7 @@ function App() {
 		setShowCompleted(!showCompleted)
 	}
 	
-	/*
-	 logic for EditForm
-	*/
+	/* logic for EditForm */
 
 	function editTodo(todo) {
 		// TODO auto focus description field
@@ -196,10 +202,10 @@ function App() {
 
 	return (
 		<div className="App">
-			<Navigation filterTodos={filterTodos} projects={projects} contexts={contexts} parseTodoTxt={parseTodoTxt}/>
+		<div id="wrapper">
+			<Navigation filterTodos={filterTodos} filter={filter} projects={projects} contexts={contexts} parseTodoTxt={parseTodoTxt}/>
 			<div id="todo-list">
-				<input ref={newTodoRef} onKeyDown={handleAddTodo} type="text" size="150"/>
-				<button onClick={handleAddTodo} id="addTodoButton">Add Todo</button>
+				<div><input id='add-todo' ref={newTodoRef} onKeyDown={handleAddTodo} type="text" size="150" placeholder="Add a new todo..." /></div>
 				<Todolist toggleShowCompleted={toggleShowCompleted} showCompleted={showCompleted} filter={filter} todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
 			</div>
 		{ editFormVisible &&
@@ -214,6 +220,7 @@ function App() {
 				hideEditForm={hideEditForm}
 				deleteTodo={deleteTodo}
 			/> }
+		</div>
 		</div>
 	);
 }
