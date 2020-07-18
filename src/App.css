@@ -1,3 +1,7 @@
+input:focus, textarea:focus, select:focus, button:focus {
+	outline: 0 !important; /* TODO remove !important from this declaration */
+}
+
 .App {
 	position: fixed;
 	width: 100%;
@@ -9,13 +13,15 @@
 }
 
 #navigation {
-	flex-grow: 0;
-	flex-basis: auto;
 	cursor: pointer;
 	height: 100vh;
 	width: fit-content;
 	min-width: fit-content;
 	padding: 0 10px 0 0;
+}
+
+#navigation * {
+	border: thin solid;
 }
 
 #navigation ul {
@@ -39,7 +45,6 @@
 }
 
 #add-todo {
-	position: relative;
 	display: inline;
 	width: 90%;
 	margin: 0;
@@ -48,7 +53,6 @@
 }
 
 #todo-list {
-	flex-grow: 2;
 	border: thin solid;
 }
 
@@ -57,11 +61,25 @@
 	height: 93vh;
 }
 
-#edit-form {
-	flex-grow: 3;
+#edit-todo {
 	border: thin solid;
 	height: 100vh;
-	width: 50vw;
+	width: 300px;
+	margin-right: 50px;
+}
+
+button.addProjectBtn {
+	display: inline;
+}
+
+#edit-custom-tags {
+	border: thin double;
+	display: block;
+	min-height: 100px;
+}
+
+#custom-tag-dialog {
+
 }
 
 .todoItem {
@@ -192,7 +210,20 @@ input[type="text"]:focus {
 	outline: 1px solid black;
 }
 
+input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+}
+
+input[type="checkbox"].smallCheck {
+	width: 15px;
+	height: 15px;
+}
+
 button:focus {
 	outline: 1px solid blue;
 }
 
+input, textarea, button {
+	cursor: pointer;
+}

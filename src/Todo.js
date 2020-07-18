@@ -16,9 +16,12 @@ function MetaTags({tags}) {
 	)
 }
 
-export default function Todo ({todo, toggleCompleted, editTodo, changePriority}) {
+export default function Todo ({todo, toggleCompleted, editTodo, changePriority, setShowProjectList, setShowContextList, setModalVisible}) {
 
 	function handleItemClick(e) { // TODO move this to app.js
+		setShowProjectList(false)
+		setShowContextList(false)
+		setModalVisible(false)
 		if( e.target.type  === 'checkbox' ) {
 			toggleCompleted(todo.id)
 		} else if(e.target.id === 'priority') {
@@ -32,11 +35,11 @@ export default function Todo ({todo, toggleCompleted, editTodo, changePriority})
 		<div className="todoItem" onClick={handleItemClick} >
 				<div className={'priority priority' + (todo.priority ? '_set' : '')} id='priority' data-priority={todo.priority}>{todo.priority}</div>
 			<label className="css-label">
-				<input type="checkbox" className="css-checkbox" checked={todo.completed} readOnly/>
+				<input type="checkbox" className="css-checkbox" defaultChecked={todo.completed} />
 			</label>
 				{todo.description}
 			<div className="task-meta">
-				{ todo.project.length !== 0 && 
+				{ todo.project.length !== 0 &&
 					todo.project.map( project => {
 						return (
 							<div key={uuidv4()} className="project">+{ project }</div>

@@ -2,7 +2,7 @@ import React from 'react'
 import Todo from './Todo'
 
 
-export default function Todolist({toggleShowCompleted, showCompleted, filter, todos, toggleCompleted, handleItemClick, editTodo, changePriority}) {
+export default function Todolist({toggleShowCompleted, showCompleted, filter, todos, toggleCompleted, handleItemClick, editTodo, changePriority, setShowProjectList, setShowContextList, setModalVisible}) {
 	const [activeList, completedList] = [...todos].reduce( (list, todo) => {
 	
 		if(filter.value === 'all') { // show all todos...
@@ -47,8 +47,8 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 		}
 		return list
 	}, [ [], [] ])
-	
-	if(filter.tag !== 'all' && filter.value === 'all' ) {
+
+	if(filter.tag !== 'all' && filter.value.split(' ')[0] !== 'No') {
 		activeList.sort( (a, b) => {
 			// console.log({a}, {b})
 			const [first, second] = [a[filter.tag][0].toLowerCase(), b[filter.tag][0].toLowerCase()]
@@ -68,12 +68,15 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 		<div id="todos">
 			<div>
 				{activeList.map( function(todo, index, todos) {
-					// console.log(todo[filter.tag])
 					const printHeader = (todo[filter.tag] !== undefined && (index < 1 || todos[index - 1][filter.tag][0] !== todo[filter.tag][0]) )
 					return (
 						<React.Fragment key={todo.id + 'fragment'}>
-						{ printHeader && <div className="tag-header">{todo[filter.tag]}</div> }
-						<Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
+						{ printHeader && <div className="tag-header">{todo[filter.tag].join(' & ')}</div> }
+						<Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} 
+							setShowProjectList={setShowProjectList}
+							setShowContextList={setShowContextList}
+							setModalVisible={setModalVisible}
+						/>
 						</React.Fragment>
 					)
 				})}
@@ -85,7 +88,16 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 					return (
 						<React.Fragment key={todo.id + 'fragment'}>
 						{ printHeader && <div className="tag-header">{todo[filter.tag]}</div> }
-						<Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
+						<Todo
+							key={todo.id}
+							todo={todo}
+							toggleCompleted={toggleCompleted}
+							editTodo={editTodo}
+							changePriority={changePriority}
+							setShowProjectList={setShowProjectList}
+							setShowContextList={setShowContextList}
+							setModalVisible={setModalVisible}
+						/>
 						</React.Fragment>
 					)
 				})}

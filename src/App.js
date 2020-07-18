@@ -17,9 +17,8 @@ store file info for later varification before download
 
 function App() {
 
-	const [todos, setTodos] = useState([])
-	const [editFormVisible, setEditFormVisible] = useState(false)
-	const [todoToEdit, setTodoToEdit] = useState({
+	const blankTodo = {
+		id: 0,
 		description: '',
 		priority: '',
 		completed: false,
@@ -28,7 +27,10 @@ function App() {
 		created: new Date(),
 		due: '',
 		tags: []
-	})
+	}
+	const [todos, setTodos] = useState([])
+	const [editFormVisible, setEditFormVisible] = useState(true)
+	const [todoToEdit, setTodoToEdit] = useState(blankTodo)
 	const newTodoRef = useRef()
 	const [projects, setProjects] = useState([])
 	const [contexts, setContexts] = useState([])
@@ -37,6 +39,9 @@ function App() {
 		value:'all'
 	})
 	const [showCompleted, setShowCompleted] = useState(false)
+	const [projectListVisible, setShowProjectList] = useState(false)
+	const [contextListVisible, setShowContextList] = useState(false)
+	const [modalVisible, setModalVisible] = useState(false)
 
 	useEffect( () => {
 		const storedTodos = JSON.parse(localStorage.getItem(LOCAL_TODOS))
@@ -51,33 +56,21 @@ function App() {
 
 	useEffect( () => {
 		const tasks = [...todos]
-		const projectList = tasks.reduce( (acc, cur) => {
-			if(cur.project && ! cur.project.some( project => acc.includes(project)) ) {
-				cur.project.forEach( project => {
-					acc.push(project)
-				})
-				return acc
-			} else {
-				return acc
-			}
-		}, [] )
+		let projects = []
+		tasks.forEach( task => {
+			projects = [...projects, ...task.project]
+		})
+		const projectList = projects.reduce( (acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [] ).sort()
 		setProjects(projectList)
-		const contextList = tasks.reduce( (acc, cur) => {
-			if(cur.context && ! cur.context.some( context => acc.includes(context)) ) {
-				cur.context.forEach( context => {
-					acc.push(context)
-				})
-				return acc
-			} else {
-				return acc
-			}
-		}, [] )
+		let contexts = []
+		tasks.forEach( task => {
+			contexts = [...contexts, ...task.context]
+		})
+		const contextList = contexts.reduce( (acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [] ).sort()
 		setContexts(contextList)
 	},[todos])
 
 	function filterTodos(e) {
-		// console.log(e.target.textContent)
-		// console.log(e.target.parentNode.firstChild.textContent)
 		const item = e.target.textContent
 		const category = e.target.parentNode.firstChild.textContent
 		const newFilter = {...filter}
@@ -163,10 +156,28 @@ function App() {
 	}
 
 	function handleChange(e) {
-		setTodoToEdit({
-			...todoToEdit,
-			[e.target.name]: e.target.value
-		})
+		let newValue
+		if(e.target.dataset.tag === 'project' || e.target.dataset.tag === 'context') {
+			if(e.target.checked === false) {
+				todoToEdit.project.splice(todoToEdit.project.indexOf(e.target.name), 1)
+			}
+		} else if(e.target.name === 'project' || e.target.name === 'context') {
+			setShowProjectList(false)
+			setShowContextList(false)
+			if(! todoToEdit[e.target.name].includes( (newValue = e.target.value.replace(/\s/g,'') ) ) ) {
+				if(newValue === '') return;
+				setTodoToEdit({
+					...todoToEdit,
+					[e.target.name]: [...todoToEdit[e.target.name], newValue]
+				})
+			}
+			e.target.value = ''
+		} else {
+			setTodoToEdit({
+				...todoToEdit,
+				[e.target.name]: e.target.value
+			})
+		}
 	}
 	
 	function formatDate(theDate) {
@@ -192,12 +203,24 @@ function App() {
 	}
 
 	function deleteTodo() {
-		let tasks = [...todos]
-		const deleteIndex = tasks.findIndex( todo => todo.id === todoToEdit.id )
-		tasks.splice(deleteIndex, 1)
-		setTodos(tasks)
+		const reallyDoIt = window.confirm('Are you sure. We can\'t undo this.')
+		if(reallyDoIt) {
+			let tasks = [...todos]
+			const deleteIndex = tasks.findIndex( todo => todo.id === todoToEdit.id )
+			tasks.splice(deleteIndex, 1)
+			setTodos(tasks)
+			setTodoToEdit(blankTodo)
+		}
 	}
 
+	function toggleShowProjectList() {
+		setShowProjectList(!projectListVisible)
+	}
+	
+	function toggleShowContextList() {
+		setShowContextList(!contextListVisible)
+	}
+	
 	/* end EditForm */
 
 	return (
@@ -206,11 +229,22 @@ function App() {
 			<Navigation filterTodos={filterTodos} filter={filter} projects={projects} contexts={contexts} parseTodoTxt={parseTodoTxt}/>
 			<div id="todo-list">
 				<div><input id='add-todo' ref={newTodoRef} onKeyDown={handleAddTodo} type="text" size="150" placeholder="Add a new todo..." /></div>
-				<Todolist toggleShowCompleted={toggleShowCompleted} showCompleted={showCompleted} filter={filter} todos={todos} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} />
+				<Todolist
+					toggleShowCompleted={toggleShowCompleted}
+					showCompleted={showCompleted}
+					filter={filter}
+					todos={todos}
+					toggleCompleted={toggleCompleted}
+					editTodo={editTodo}
+					changePriority={changePriority}
+					setShowProjectList={setShowProjectList}
+					setShowContextList={setShowContextList}
+					setModalVisible={setModalVisible}
+				/>
 			</div>
 		{ editFormVisible &&
 			<EditForm
-				todoToEdit={todoToEdit}
+				todo={todoToEdit}
 				projects={projects}
 				contexts={contexts}
 				handleChange={handleChange}
@@ -219,6 +253,12 @@ function App() {
 				handleUpdateTodo={handleUpdateTodo}
 				hideEditForm={hideEditForm}
 				deleteTodo={deleteTodo}
+				toggleShowProjectList={toggleShowProjectList}
+				projectListVisible={projectListVisible}
+				toggleShowContextList={toggleShowContextList}
+				contextListVisible={contextListVisible}
+				setModalVisible={setModalVisible}
+				modalVisible={modalVisible}
 			/> }
 		</div>
 		</div>

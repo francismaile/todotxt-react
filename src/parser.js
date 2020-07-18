@@ -6,14 +6,14 @@ export default function parseTodo(todoTxt) {
 		let newTodoTxt = todoTxt.trim()
 
 		const newTodo = {
+			id: uuidv4(),
+			description: '',
 			priority: '',
 			completed: false,
-			description: '',
-			id: uuidv4(),
 			project: [],
 			context: [],
 			created: new Date(),
-			due: ''
+			tags: []
 		}
 		newTodoTxt = newTodoTxt.replace(/^x\s+/, function(match) {
 			newTodo.completed = !!match; // !! converts result.match to boolean
@@ -27,11 +27,13 @@ export default function parseTodo(todoTxt) {
 		// get todo item's project connection
 		newTodoTxt = newTodoTxt.replace(/\+\w+/gi, match => {
 			newTodo.project.push(match.slice(1))
+			newTodo.project.sort()
 			return '';
 		});
-		// get todo item's context
+		// get todo item's context connection
 		newTodoTxt = newTodoTxt.replace(/@\w+/gi, match => {
 			newTodo.context.push(match.slice(1))
+			newTodo.context.sort()
 			return '';
 		});
 		// get todo item's context
