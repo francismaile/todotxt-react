@@ -1,10 +1,14 @@
 import React from 'react'
 import Todo from './Todo'
 
+/*
+ sort todos by completed and not
+ sort todos into categories by project, context or priority. todos can belong to more than one project or context
+ display the list by project, context or priorty
+*/
+export default function Todolist({toggleShowCompleted, showCompleted, filter, todos, toggleCompleted, handleItemClick, editTodo, changePriority, setShowProjectList, setShowContextList}) {
 
-export default function Todolist({toggleShowCompleted, showCompleted, filter, todos, toggleCompleted, handleItemClick, editTodo, changePriority, setShowProjectList, setShowContextList, setModalVisible}) {
 	const [activeList, completedList] = [...todos].reduce( (list, todo) => {
-	
 		if(filter.value === 'all') { // show all todos...
 			if(filter.tag === 'priority') { // ...assigned any priority
 				if(todo.priority !== '') {
@@ -50,7 +54,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 
 	if(filter.tag !== 'all' && filter.value.split(' ')[0] !== 'No') {
 		activeList.sort( (a, b) => {
-			// console.log({a}, {b})
 			const [first, second] = [a[filter.tag][0].toLowerCase(), b[filter.tag][0].toLowerCase()]
 			if(first < second) return -1
 			else if(first > second) return 1
@@ -64,6 +67,8 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 		})
 	}
 
+	console.log({activeList})
+
 	return (
 		<div id="todos">
 			<div>
@@ -75,7 +80,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 						<Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} 
 							setShowProjectList={setShowProjectList}
 							setShowContextList={setShowContextList}
-							setModalVisible={setModalVisible}
 						/>
 						</React.Fragment>
 					)
@@ -96,7 +100,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 							changePriority={changePriority}
 							setShowProjectList={setShowProjectList}
 							setShowContextList={setShowContextList}
-							setModalVisible={setModalVisible}
 						/>
 						</React.Fragment>
 					)

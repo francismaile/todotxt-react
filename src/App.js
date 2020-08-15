@@ -29,7 +29,7 @@ function App() {
 		tags: []
 	}
 	const [todos, setTodos] = useState([])
-	const [editFormVisible, setEditFormVisible] = useState(true)
+	const [editFormVisible, setEditFormVisible] = useState(false)
 	const [todoToEdit, setTodoToEdit] = useState(blankTodo)
 	const newTodoRef = useRef()
 	const [projects, setProjects] = useState([])
@@ -39,8 +39,7 @@ function App() {
 		value:'all'
 	})
 	const [showCompleted, setShowCompleted] = useState(false)
-	const [projectListVisible, setShowProjectList] = useState(false)
-	const [contextListVisible, setShowContextList] = useState(false)
+	const [hilitedCustomTag, setHilitedTag] = useState(-1)
 	const [modalVisible, setModalVisible] = useState(false)
 
 	useEffect( () => {
@@ -71,9 +70,11 @@ function App() {
 	},[todos])
 
 	function filterTodos(e) {
+		// console.log(e.target.textContent)
 		const item = e.target.textContent
 		const category = e.target.parentNode.firstChild.textContent
 		const newFilter = {...filter}
+		// console.log({category}, {item}, {newFilter})
 		if(item === category) {
 			if(item === 'All') {
 				newFilter.tag = item.toLowerCase()
@@ -143,6 +144,8 @@ function App() {
 		// TODO auto focus description field
 		setTodoToEdit(JSON.parse(JSON.stringify(todo)))
 		setEditFormVisible(true)
+		setHilitedTag(-1)
+		setModalVisible(false)
 	}
 
 	function handleCustomTagChange(e) {
@@ -153,37 +156,6 @@ function App() {
 			...todoToEdit,
 			tags: newTags
 		})
-	}
-
-	function handleChange(e) {
-		let newValue
-		if(e.target.dataset.tag === 'project' || e.target.dataset.tag === 'context') {
-			if(e.target.checked === false) {
-				todoToEdit.project.splice(todoToEdit.project.indexOf(e.target.name), 1)
-			}
-		} else if(e.target.name === 'project' || e.target.name === 'context') {
-			setShowProjectList(false)
-			setShowContextList(false)
-			if(! todoToEdit[e.target.name].includes( (newValue = e.target.value.replace(/\s/g,'') ) ) ) {
-				if(newValue === '') return;
-				setTodoToEdit({
-					...todoToEdit,
-					[e.target.name]: [...todoToEdit[e.target.name], newValue]
-				})
-			}
-			e.target.value = ''
-		} else {
-			setTodoToEdit({
-				...todoToEdit,
-				[e.target.name]: e.target.value
-			})
-		}
-	}
-	
-	function formatDate(theDate) {
-		if(!theDate) return ''
-		theDate = typeof theDate === "string" ? new Date(theDate) : theDate
-		return theDate.toISOString().split('T')[0]
 	}
 
 	function handleUpdateTodo(e) {
@@ -213,14 +185,6 @@ function App() {
 		}
 	}
 
-	function toggleShowProjectList() {
-		setShowProjectList(!projectListVisible)
-	}
-	
-	function toggleShowContextList() {
-		setShowContextList(!contextListVisible)
-	}
-	
 	/* end EditForm */
 
 	return (
@@ -237,28 +201,22 @@ function App() {
 					toggleCompleted={toggleCompleted}
 					editTodo={editTodo}
 					changePriority={changePriority}
-					setShowProjectList={setShowProjectList}
-					setShowContextList={setShowContextList}
-					setModalVisible={setModalVisible}
 				/>
 			</div>
 		{ editFormVisible &&
 			<EditForm
 				todo={todoToEdit}
+				setTodoToEdit={setTodoToEdit}
 				projects={projects}
 				contexts={contexts}
-				handleChange={handleChange}
 				handleCustomTagChange = {handleCustomTagChange}
-				formatDate={formatDate}
 				handleUpdateTodo={handleUpdateTodo}
 				hideEditForm={hideEditForm}
 				deleteTodo={deleteTodo}
-				toggleShowProjectList={toggleShowProjectList}
-				projectListVisible={projectListVisible}
-				toggleShowContextList={toggleShowContextList}
-				contextListVisible={contextListVisible}
-				setModalVisible={setModalVisible}
+				hilitedCustomTag={hilitedCustomTag}
+				setHilitedTag={setHilitedTag}
 				modalVisible={modalVisible}
+				setModalVisible={setModalVisible}
 			/> }
 		</div>
 		</div>

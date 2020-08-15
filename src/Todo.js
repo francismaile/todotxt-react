@@ -16,12 +16,9 @@ function MetaTags({tags}) {
 	)
 }
 
-export default function Todo ({todo, toggleCompleted, editTodo, changePriority, setShowProjectList, setShowContextList, setModalVisible}) {
+export default function Todo ({todo, toggleCompleted, editTodo, changePriority}) {
 
 	function handleItemClick(e) { // TODO move this to app.js
-		setShowProjectList(false)
-		setShowContextList(false)
-		setModalVisible(false)
 		if( e.target.type  === 'checkbox' ) {
 			toggleCompleted(todo.id)
 		} else if(e.target.id === 'priority') {

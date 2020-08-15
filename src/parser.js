@@ -24,6 +24,16 @@ export default function parseTodo(todoTxt) {
 			newTodo.priority = match[1];
 			return '';
 		});
+		// creation and/or completion date
+		newTodoTxt = newTodoTxt.replace(/^\d{4}-\d{1,2}-\d{1,2}\s+/, match => {
+			newTodo.createdDate = match.trim();
+			return '';
+		});
+		newTodoTxt = newTodoTxt.replace(/^\d{4}-\d{1,2}-\d{1,2}\s+/, match => {
+			newTodo.completeDate = newTodo.createdDate;
+			newTodo.createdDate = match.trim();
+			return '';
+		});
 		// get todo item's project connection
 		newTodoTxt = newTodoTxt.replace(/\+\w+/gi, match => {
 			newTodo.project.push(match.slice(1))

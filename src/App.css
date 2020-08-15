@@ -61,6 +61,8 @@ input:focus, textarea:focus, select:focus, button:focus {
 	height: 93vh;
 }
 
+/* Edit Todo Form */
+
 #edit-todo {
 	border: thin solid;
 	height: 100vh;
@@ -82,6 +84,22 @@ button.addProjectBtn {
 
 }
 
+input.custom-tag {
+	width: 50px;
+}
+
+ul#editCustomTags {
+	border: thin solid;
+	padding: 0px;
+	list-style-type: none;
+	cursor: pointer;
+}
+
+ul#editCustomTags li.hilited {
+	background: #b3d7fe;
+}
+/* end edit todo form */
+
 .todoItem {
 	border: solid gray thin;
 	margin-top: 6px;
@@ -98,6 +116,7 @@ button.addProjectBtn {
 	background: #F0F0F0;
 	text-align: center;
 }
+
 .toggleShowCompleted {
 	 width: 100%;
 	 text-align: center;
