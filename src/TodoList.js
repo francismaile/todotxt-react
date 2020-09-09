@@ -52,6 +52,7 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 		return list
 	}, [ [], [] ])
 
+
 	if(filter.tag !== 'all' && filter.value.split(' ')[0] !== 'No') {
 		activeList.sort( (a, b) => {
 			const [first, second] = [a[filter.tag][0].toLowerCase(), b[filter.tag][0].toLowerCase()]
@@ -66,8 +67,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 			return 0
 		})
 	}
-
-	console.log({activeList})
 
 	return (
 		<div id="todos">
