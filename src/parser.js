@@ -35,14 +35,15 @@ export default function parseTodo(todoTxt) {
 			return '';
 		});
 		// get todo item's project connection
-		newTodoTxt = newTodoTxt.replace(/\+\w+/gi, match => {
-			newTodo.project.push(match.slice(1))
+		newTodoTxt = newTodoTxt.replace(/\s\+\w+/gi, match => {
+			console.log(match)
+			newTodo.project.push(match.slice(1).substring(1))
 			newTodo.project.sort()
 			return '';
 		});
 		// get todo item's context connection
-		newTodoTxt = newTodoTxt.replace(/@\w+/gi, match => {
-			newTodo.context.push(match.slice(1))
+		newTodoTxt = newTodoTxt.replace(/\s@\w+/gi, match => {
+			newTodo.context.push(match.slice(1).substring(1))
 			newTodo.context.sort()
 			return '';
 		});

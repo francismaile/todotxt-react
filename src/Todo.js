@@ -8,8 +8,7 @@ function MetaTags({tags}) {
 		metaTags.map( tag => {
 			return (
 				<div key={uuidv4()} className="custom-tag">
-					<span className="custom-tag-key">{tag.key}</span>
-					<span className="custom-tag-value">{tag.value}</span>
+					<span tooltip={tag.value} className="custom-tag-key has-tip " tooltip-position="right">#{tag.key}</span>
 				</div>
 			)
 		})
@@ -24,6 +23,13 @@ export default function Todo ({todo, toggleCompleted, editTodo, changePriority})
 		} else if(e.target.id === 'priority') {
 			changePriority(e.target.dataset.priority,todo.id )
 		} else {
+			[...document.getElementsByClassName('todoItem')].forEach( element => element.classList.remove('hilited') )
+			let thisTask = e.target
+			while( ![...thisTask.classList].includes('todoItem') ) {
+				console.log(thisTask)
+				thisTask = thisTask.parentNode
+			}
+			thisTask.classList.add('hilited')
 			editTodo(todo)
 		}
 	}

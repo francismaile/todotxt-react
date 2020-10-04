@@ -98,7 +98,7 @@ function App() {
 	}
 	
 	function handleAddTodo(e) {
-		// TODO why is this not fired onSubmit?
+		// TODO why is this not fired onSubmit?a because then it would need to be in a fomr element.
 		if(e.keyCode === 13 || e.target.id === 'addTodoButton') {
 			const newTodoText = newTodoRef.current.value
 			// const newTodo = (parseTodo(newTodoText))
@@ -171,10 +171,12 @@ function App() {
 	}
 
 	function hideEditForm() {
+		[...document.getElementsByClassName('todoItem')].forEach( element => element.classList.remove('hilited') )
 		setEditFormVisible(false)
 	}
 
 	function deleteTodo() {
+		[...document.getElementsByClassName('todoItem')].forEach( element => element.classList.remove('hilited') )
 		const reallyDoIt = window.confirm('Are you sure. We can\'t undo this.')
 		if(reallyDoIt) {
 			let tasks = [...todos]
