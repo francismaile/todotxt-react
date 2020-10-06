@@ -93,10 +93,21 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 			<div>
 				{
 				(() => {
-					if( (filter.tag === 'project' || filter.tag === 'project') && filter.tag !== 'all' ) {
+					if( (filter.tag === 'project' || filter.tag === 'context') && filter.tag !== 'all' ) {
 						return Object.entries(groupBy(activeList, filter.tag)).map( item => {
 							return (
+								<>
 								<div className="tag-header">{item[0]}</div>
+								{ item[1].map( todo => {
+									return (
+									<Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} 
+										setShowProjectList={setShowProjectList}
+										setShowContextList={setShowContextList}
+									/>
+									)
+									})
+								}
+								</>
 							)
 						})
 					} else {
