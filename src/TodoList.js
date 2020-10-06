@@ -53,7 +53,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 		return list
 	}, [ [], [] ])
 
-	/*
 	if(filter.tag !== 'all' && filter.value.split(' ')[0] !== 'No') {
 		activeList.sort( (a, b) => {
 			const [first, second] = [a[filter.tag][0].toLowerCase(), b[filter.tag][0].toLowerCase()]
@@ -68,7 +67,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 			return 0
 		})
 	}
-	*/
 
 	function groupBy(activeList, filterTag) {
 		return activeList.reduce( (acc, cur) => {
@@ -79,15 +77,6 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 		}, {})
 	}
 
-// 	if( (filter.tag === 'project' || filter.tag === 'project') && filter.tag !== 'all' ) {
-// 		Object.entries(groupBy(activeList, filter.tag)).forEach( item => {
-// 			console.log('Header:', item[0])
-// 			item[1].forEach( todo => {
-// 				console.log(todo)
-// 			})
-// 		})
-// 	}
-	
 	return (
 		<div id="todos">
 			<div>
@@ -115,7 +104,7 @@ export default function Todolist({toggleShowCompleted, showCompleted, filter, to
 								const printHeader = (todo[filter.tag] !== undefined && (index < 1 || todos[index - 1][filter.tag][0] !== todo[filter.tag][0]) )
 								return (
 									<React.Fragment key={todo.id + 'fragment'}>
-								{ printHeader && <div className="tag-header">{todo[filter.tag].join(' & ')}</div> }
+								{ printHeader && <div className="tag-header">{todo[filter.tag]}</div> }
 									<Todo key={todo.id} todo={todo} toggleCompleted={toggleCompleted} editTodo={editTodo} changePriority={changePriority} 
 										setShowProjectList={setShowProjectList}
 										setShowContextList={setShowContextList}
